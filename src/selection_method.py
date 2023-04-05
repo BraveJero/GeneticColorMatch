@@ -83,14 +83,16 @@ class DeterministicTournamentSelection(SelectionMethod):
         if len(population) == 0:
             return winners
 
+        # TODO: Check repeated winners?
+
         for i in range(k):
-            random.shuffle(population)
-            best = population[0]
+            best = population[random.randint(0, len(population))]
             best_fitness = fitness(best)
             for j in range(1, self._m):
-                aux_fitness = fitness(population[j])
+                chosen = population[random.randint(0, len(population))]
+                aux_fitness = fitness(chosen)
                 if best_fitness < aux_fitness:
-                    best = population[j]
+                    best = chosen
                     best_fitness = aux_fitness
             winners.append(best)
 
