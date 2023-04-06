@@ -45,16 +45,16 @@ class RouletteWheelSelection(SelectionMethod):
         winners = []
 
         fitness_sum = sum(fitness_list)
-        relative_fitness = [individual_fitness / fitness_sum for individual_fitness in fitness_list]
 
         for i in range(k):
             r = random.random()
             accumulated_fitness = 0
             for j in range(length):
-                if accumulated_fitness < r <= accumulated_fitness + relative_fitness[j]:
+                relative_fitness = fitness_list[j] / fitness_sum
+                if accumulated_fitness < r <= accumulated_fitness + relative_fitness:
                     winners.append(population[j])
                     break
-                accumulated_fitness += relative_fitness[j]
+                accumulated_fitness += relative_fitness
 
         return winners
 
@@ -68,19 +68,19 @@ class UniversalSelection(SelectionMethod):
         if length == 0:
             return winners
 
-        individual_fitness_list = [fitness(ind) for ind in population]
-        fitness_sum = sum(individual_fitness_list)
-        relative_fitness = [individual_fitness / fitness_sum for individual_fitness in individual_fitness_list]
+        fitness_list = [fitness(ind) for ind in population]
+        fitness_sum = sum(fitness_list)
 
         r = random.random()
         for i in range(k):
             ri = (r + i) / k
             accumulated_fitness = 0
             for j in range(length):
-                if accumulated_fitness < ri <= accumulated_fitness + relative_fitness[j]:
+                relative_fitness = fitness_list[j] / fitness_sum
+                if accumulated_fitness < r <= accumulated_fitness + relative_fitness:
                     winners.append(population[j])
                     break
-                accumulated_fitness += relative_fitness[j]
+                accumulated_fitness += relative_fitness
 
         return winners
 
