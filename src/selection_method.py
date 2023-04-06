@@ -80,16 +80,15 @@ class DeterministicTournamentSelection(SelectionMethod):
             -> List[Individual]:
         winners = []
 
+        length = len(population)
         if len(population) == 0:
             return winners
 
-        # TODO: Check repeated winners?
-
         for i in range(k):
-            best = population[random.randint(0, len(population))]
+            best = population[random.randint(0, length - 1)]
             best_fitness = fitness(best)
             for j in range(1, self._m):
-                chosen = population[random.randint(0, len(population))]
+                chosen = population[random.randint(0, length - 1)]
                 aux_fitness = fitness(chosen)
                 if best_fitness < aux_fitness:
                     best = chosen
@@ -112,8 +111,8 @@ class ProbabilisticTournamentSelection(SelectionMethod):
         length = len(population)
 
         for i in range(k):
-            first = population[random.randint(0, length)]
-            second = population[random.randint(0, length)]
+            first = population[random.randint(0, length - 1)]
+            second = population[random.randint(0, length - 1)]
             first_fitness = fitness(first)
             second_fitness = fitness(second)
 
