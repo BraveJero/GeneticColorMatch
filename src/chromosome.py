@@ -7,7 +7,11 @@ from math import gcd
 
 
 class Chromosome(ABC):
-    def __init__(self):
+    def __init__(self, information: List):
+        pass
+
+    @property
+    def information(self) -> List:
         pass
 
 
@@ -17,7 +21,7 @@ class ColorChromosome(Chromosome):
         self._simplify()
 
     @property
-    def proportions(self):
+    def information(self):
         return self._proportions
 
     # Simplifies proportions to simplest terms (i.e. [2, 4, 6] ---> [1, 2, 3])
