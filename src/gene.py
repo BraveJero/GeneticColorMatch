@@ -1,7 +1,8 @@
-from abc import ABC
 from __future__ import annotations
 
+from abc import ABC
 import numpy as np
+
 
 class Gene(ABC):
     @property
