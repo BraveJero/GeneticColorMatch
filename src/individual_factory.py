@@ -26,14 +26,14 @@ class IndividualFactory(ABC):
 
 class ColorProportionIndividualFactory(IndividualFactory):
     def __init__(self, goal: Color, palette: ColorPalette):
-        self._goal = goal
-        self._palette = palette
+        self._goal: Color = goal
+        self._palette: ColorPalette = palette
 
     def generate_random(self) -> Individual:
         ch = []
         for _ in range(len(self._palette)):
             ch.append(ColorProportionGene.create_random())
-        return ColorIndividual(ch, self._goal, self._palette)
+        return ColorIndividual(Chromosome(ch), self._palette, self._goal)
 
     def generate_from_chromosome(self, chromosome: Chromosome) -> ColorIndividual:
-        return ColorIndividual(chromosome, self._goal, self._palette)
+        return ColorIndividual(chromosome, self._palette, self._goal)
