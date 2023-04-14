@@ -1,0 +1,15 @@
+{
+  "stop_condition": {
+    "condition": "",
+    "parameter": ""
+  },
+  "selection_method": {
+    "method": "",
+    "parameter": ""
+  },
+  "crossover_method": "",
+  "mutation_method": "",
+  "new_generation_selection": "",
+  "n": "",
+  "k": ""
+}
