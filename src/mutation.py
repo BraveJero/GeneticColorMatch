@@ -1,10 +1,10 @@
+import random
 from abc import ABC
 
-from .chromosome import Chromosome
-from .gene import Gene
-from .mutation_method import MutationMethod
 import numpy as np
-import random
+
+from .chromosome import Chromosome
+from .mutation_method import MutationMethod
 
 
 class Mutation(ABC):
@@ -38,4 +38,11 @@ class UniformMutation(Mutation):
     def mutate(self, ch: Chromosome):
         for g in ch.information:
             if np.random.uniform(0, 1) < self._prob:
+                self._method(g)
+
+
+class CompleteMutation(Mutation):
+    def mutate(self, ch: Chromosome):
+        if np.random.uniform():
+            for g in ch.information:
                 self._method(g)
