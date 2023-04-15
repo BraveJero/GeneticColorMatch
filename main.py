@@ -3,7 +3,6 @@ import sys
 
 import numpy as np
 
-# from menu import Menu
 from src.color import Color
 from src.color_palette import ColorPalette
 from src.crossover import Crossover, OnePointCrossover, TwoPointCrossover, AnnularCrossover, UniformCrossover
@@ -104,10 +103,6 @@ def main():
     if len(sys.argv) < 2:
         print("Config file argument not found")
         exit(1)
-
-    # if sys.argv[1] == "menu":
-    #     Menu().run()
-    #     return
 
     config_path = sys.argv[1]
 
