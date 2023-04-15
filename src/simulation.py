@@ -1,4 +1,4 @@
-from typing import Callable, List
+from typing import List
 
 import numpy as np
 
@@ -17,20 +17,16 @@ class Simulation:
                  n: int,
                  k: int,
                  stop_condition: StopCondition,
-                 fitness: Callable[[Individual], float],
                  selection_method: SelectionMethod,
                  crossover_method: Crossover,
                  mutation: Mutation,
-                 mutation_method: MutationMethod,
                  individual_factory: IndividualFactory):
         self._n: int = n
         self._k = k - k % 1
         self._sc = stop_condition
-        self._fitness = fitness
         self._sm = selection_method
         self._cm = crossover_method
         self._mutation = mutation
-        self._mm = mutation_method
         self._if: IndividualFactory = individual_factory
 
     def simulate(self) -> List[List[Individual]]:
@@ -40,7 +36,7 @@ class Simulation:
         iteration = 0
         while not self._sc(iteration, gen):
             iteration += 1
-            parents: List[Individual] = self._sm.get_winners(gen, self._k, self._fitness)
+            parents: List[Individual] = self._sm.get_winners(gen, self._k)
             children: List[Individual] = []
             for i in range(self._k // 2):
                 p1: Individual = parents[np.random.randint(0, len(parents))]
@@ -54,7 +50,7 @@ class Simulation:
 
             # TODO: Use selection methods which consider children
             gen.extend(children)
-            gen = self._sm.get_winners(gen, self._n, self._fitness)
+            gen = self._sm.get_winners(gen, self._n)
             ans.append(gen)
 
         return ans

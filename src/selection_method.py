@@ -1,19 +1,19 @@
 import math
 import random
 from abc import ABC
-from typing import List, Callable
+from typing import List
 
 from src.individual import Individual
 
 
 class SelectionMethod(ABC):
-    def get_winners(self, population: List[Individual], k: int, fitness: Callable[[Individual], float]) \
+    def get_winners(self, population: List[Individual], k: int) \
             -> List[Individual]:
         pass
 
 
 class EliteSelection(SelectionMethod):
-    def get_winners(self, population: List[Individual], k: int, fitness: Callable[[Individual], float]) \
+    def get_winners(self, population: List[Individual], k: int) \
             -> List[Individual]:
         winners = []
 
@@ -21,7 +21,7 @@ class EliteSelection(SelectionMethod):
         if length == 0:
             return winners
 
-        population.sort(key=lambda ind: fitness(ind))
+        population.sort(key=lambda ind: ind.fitness())
 
         for i, individual in enumerate(population):
             n = math.ceil((k - i) / length)
@@ -50,18 +50,18 @@ def do_roulette(population: List[Individual], length: int, k: int, fitness_list:
 
 
 class RouletteWheelSelection(SelectionMethod):
-    def get_winners(self, population: List[Individual], k: int, fitness: Callable[[Individual], float]) \
+    def get_winners(self, population: List[Individual], k: int) \
             -> List[Individual]:
         length = len(population)
         if length == 0:
             return []
 
-        individual_fitness_list = [fitness(ind) for ind in population]
+        individual_fitness_list = [ind.fitness() for ind in population]
         return do_roulette(population, length, k, individual_fitness_list)
 
 
 class UniversalSelection(SelectionMethod):
-    def get_winners(self, population: List[Individual], k: int, fitness: Callable[[Individual], float]) \
+    def get_winners(self, population: List[Individual], k: int) \
             -> List[Individual]:
         winners = []
 
@@ -69,12 +69,12 @@ class UniversalSelection(SelectionMethod):
         if length == 0:
             return winners
 
-        fitness_list = [fitness(ind) for ind in population]
+        fitness_list = [ind.fitness() for ind in population]
         fitness_sum = sum(fitness_list)
 
         r = random.random()
         for i in range(k):
-            ri = (r + i) / k
+            ri = (r + i) / k  # TODO: ??
             accumulated_fitness = 0
             for j in range(length):
                 relative_fitness = fitness_list[j] / fitness_sum
@@ -87,13 +87,13 @@ class UniversalSelection(SelectionMethod):
 
 
 class RankSelection(RouletteWheelSelection):
-    def get_winners(self, population: List[Individual], k: int, fitness: Callable[[Individual], float]) \
+    def get_winners(self, population: List[Individual], k: int) \
             -> List[Individual]:
         length = len(population)
         if length == 0:
             return []
 
-        population.sort(key=lambda ind: fitness(ind))
+        population.sort(key=lambda ind: ind.fitness())
         individual_fitness_list = [(length - (idx + 1)) / length for idx, ind in enumerate(population)]
 
         return do_roulette(population, length, k, individual_fitness_list)
@@ -103,7 +103,7 @@ class EntropicBoltzmannSelection(SelectionMethod):
     def __init__(self, temperature: int):
         self._temperature = temperature
 
-    def get_winners(self, population: List[Individual], k: int, fitness: Callable[[Individual], float]) \
+    def get_winners(self, population: List[Individual], k: int) \
             -> List[Individual]:
         pass
 
@@ -112,7 +112,7 @@ class DeterministicTournamentSelection(SelectionMethod):
     def __init__(self, m: int):
         self._m = m
 
-    def get_winners(self, population: List[Individual], k: int, fitness: Callable[[Individual], float]) \
+    def get_winners(self, population: List[Individual], k: int) \
             -> List[Individual]:
         winners = []
 
@@ -122,10 +122,10 @@ class DeterministicTournamentSelection(SelectionMethod):
 
         for i in range(k):
             best = population[random.randint(0, length - 1)]
-            best_fitness = fitness(best)
+            best_fitness = best.fitness()
             for j in range(1, self._m):
                 chosen = population[random.randint(0, length - 1)]
-                aux_fitness = fitness(chosen)
+                aux_fitness = chosen.fitness()
                 if best_fitness < aux_fitness:
                     best = chosen
                     best_fitness = aux_fitness
@@ -135,7 +135,7 @@ class DeterministicTournamentSelection(SelectionMethod):
 
 
 class ProbabilisticTournamentSelection(SelectionMethod):
-    def get_winners(self, population: List[Individual], k: int, fitness: Callable[[Individual], float]) \
+    def get_winners(self, population: List[Individual], k: int) \
             -> List[Individual]:
         winners = []
 
@@ -149,8 +149,8 @@ class ProbabilisticTournamentSelection(SelectionMethod):
         for i in range(k):
             first = population[random.randint(0, length - 1)]
             second = population[random.randint(0, length - 1)]
-            first_fitness = fitness(first)
-            second_fitness = fitness(second)
+            first_fitness = first.fitness()
+            second_fitness = second.fitness()
 
             best = first if first_fitness > second_fitness else second
             worst = second if first_fitness > second_fitness else first
