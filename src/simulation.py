@@ -1,12 +1,10 @@
+import random
 from typing import List
-
-import numpy as np
 
 from src.crossover import Crossover
 from src.individual import Individual
 from src.individual_factory import IndividualFactory
 from src.mutation import Mutation
-from src.mutation_method import MutationMethod
 from src.selection_method import SelectionMethod
 from src.stop_condition import StopCondition
 
@@ -38,9 +36,11 @@ class Simulation:
             iteration += 1
             parents: List[Individual] = self._sm.get_winners(gen, self._k)
             children: List[Individual] = []
+            # Shuffle parents then pick in order to use them all
+            random.shuffle(parents)
             for i in range(self._k // 2):
-                p1: Individual = parents[np.random.randint(0, len(parents))]
-                p2: Individual = parents[np.random.randint(0, len(parents))]
+                p1: Individual = parents[2 * i]
+                p2: Individual = parents[2 * i + 1]
                 ch1, ch2 = self._cm.cross(p1.chromosome, p2.chromosome)
                 self._mutation.mutate(ch1)
                 self._mutation.mutate(ch2)
