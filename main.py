@@ -3,7 +3,7 @@ import sys
 
 import numpy as np
 
-from menu import Menu
+# from menu import Menu
 from src.color import Color
 from src.color_palette import ColorPalette
 from src.crossover import Crossover, OnePointCrossover, TwoPointCrossover, AnnularCrossover, UniformCrossover
@@ -76,7 +76,7 @@ def get_mutation_method(method) -> MutationMethod:
 
 def get_mutation(genetic_settings) -> Mutation:
     mutation_method = get_mutation_method(genetic_settings["mutation_method"]["method"])
-    mutation_probability = int(genetic_settings["mutation_method"]["probability"])
+    mutation_probability = float(genetic_settings["mutation_method"]["probability"])
     match genetic_settings["mutation_method"]["mutation"]:
         case "single_genome":
             return SingleGeneMutation(prob=mutation_probability, method=mutation_method)
@@ -104,7 +104,11 @@ def main():
     if len(sys.argv) < 2:
         print("Config file argument not found")
         exit(1)
-        
+
+    # if sys.argv[1] == "menu":
+    #     Menu().run()
+    #     return
+
     config_path = sys.argv[1]
 
     with open(config_path, "r") as f:
