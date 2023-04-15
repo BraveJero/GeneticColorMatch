@@ -4,8 +4,8 @@ from typing import List
 from .chromosome import Chromosome
 from .color import Color
 from .color_palette import ColorPalette
-from .individual import Individual, ColorIndividual
 from .gene import ColorProportionGene
+from .individual import Individual, ColorIndividual
 
 
 class IndividualFactory(ABC):

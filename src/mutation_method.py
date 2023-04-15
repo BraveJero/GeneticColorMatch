@@ -1,7 +1,8 @@
 from abc import ABC
-from .gene import Gene, ColorProportionGene
 
 import numpy as np
+
+from .gene import Gene, ColorProportionGene
 
 
 class MutationMethod(ABC):

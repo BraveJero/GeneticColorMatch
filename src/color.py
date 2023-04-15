@@ -29,4 +29,4 @@ class Color:
         return f"#{hex(self._r).lstrip('0x')}{hex(self._g).lstrip('0x')}{hex(self._b).lstrip('0x')}"
 
     def distance(self, other: Color) -> float:
-        return sqrt((self._b - other._b)**2 + (self._g - other._g)**2 + (self._g - other._g)**2)
+        return sqrt((self._b - other._b) ** 2 + (self._g - other._g) ** 2 + (self._g - other._g) ** 2)
