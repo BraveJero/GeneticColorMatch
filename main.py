@@ -104,11 +104,7 @@ def main():
     if len(sys.argv) < 2:
         print("Config file argument not found")
         exit(1)
-
-    if sys.argv[1] == "menu":
-        Menu().run()
-        return
-
+        
     config_path = sys.argv[1]
 
     with open(config_path, "r") as f:
