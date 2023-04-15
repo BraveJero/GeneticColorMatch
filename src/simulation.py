@@ -46,8 +46,10 @@ class Simulation:
                 self._mutation.mutate(ch2)
                 # TODO: Check factory from chromosome
                 child1, child2 = self._if.generate_from_chromosome(ch1), self._if.generate_from_chromosome(ch2)
-                children.extend([child1, child2])
-
+                if child1 is not None:
+                    children.append(child1)
+                if child2 is not None:
+                    children.append(child2)
             # TODO: Use selection methods which consider children
             gen.extend(children)
             gen = self._sm.get_winners(gen, self._n)

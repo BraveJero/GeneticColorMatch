@@ -11,8 +11,10 @@ from .individual import Individual, ColorIndividual
 class IndividualFactory(ABC):
     def generate_random_population(self, size: int) -> List[Individual]:
         ans = []
-        for _ in range(size):
-            ans.append(self.generate_random())
+        while len(ans) < size:
+            ind = self.generate_random()
+            if ind is not None:
+                ans.append(ind)
         return ans
 
     @abstractmethod
@@ -29,11 +31,13 @@ class ColorProportionIndividualFactory(IndividualFactory):
         self._goal: Color = goal
         self._palette: ColorPalette = palette
 
-    def generate_random(self) -> Individual:
+    def generate_random(self) -> Individual | None:
         ch = []
         for _ in range(len(self._palette)):
             ch.append(ColorProportionGene.create_random())
-        return ColorIndividual(Chromosome(ch), self._palette, self._goal)
+        return self.generate_from_chromosome(Chromosome(ch))
 
-    def generate_from_chromosome(self, chromosome: Chromosome) -> ColorIndividual:
+    def generate_from_chromosome(self, chromosome: Chromosome) -> ColorIndividual | None:
+        if all(gene.value == 0 for gene in chromosome.information):
+            return None
         return ColorIndividual(chromosome, self._palette, self._goal)
