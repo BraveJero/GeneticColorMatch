@@ -31,6 +31,24 @@ class EliteSelection(SelectionMethod):
         return winners
 
 
+def do_roulette(population: List[Individual], length: int, k: int, fitness_list: List[float]):
+    winners = []
+
+    fitness_sum = sum(fitness_list)
+
+    for i in range(k):
+        r = random.random()
+        accumulated_fitness = 0
+        for j in range(length):
+            relative_fitness = fitness_list[j] / fitness_sum
+            if accumulated_fitness < r <= accumulated_fitness + relative_fitness:
+                winners.append(population[j])
+                break
+            accumulated_fitness += relative_fitness
+
+    return winners
+
+
 class RouletteWheelSelection(SelectionMethod):
     def get_winners(self, population: List[Individual], k: int, fitness: Callable[[Individual], float]) \
             -> List[Individual]:
@@ -39,24 +57,7 @@ class RouletteWheelSelection(SelectionMethod):
             return []
 
         individual_fitness_list = [fitness(ind) for ind in population]
-        return self.do_roulette(population, length, k, individual_fitness_list)
-
-    def do_roulette(self, population: List[Individual], length: int, k: int, fitness_list: List[float]):
-        winners = []
-
-        fitness_sum = sum(fitness_list)
-
-        for i in range(k):
-            r = random.random()
-            accumulated_fitness = 0
-            for j in range(length):
-                relative_fitness = fitness_list[j] / fitness_sum
-                if accumulated_fitness < r <= accumulated_fitness + relative_fitness:
-                    winners.append(population[j])
-                    break
-                accumulated_fitness += relative_fitness
-
-        return winners
+        return do_roulette(population, length, k, individual_fitness_list)
 
 
 class UniversalSelection(SelectionMethod):
@@ -95,7 +96,7 @@ class RankSelection(RouletteWheelSelection):
         population.sort(key=lambda ind: fitness(ind))
         individual_fitness_list = [(length - (idx + 1)) / length for idx, ind in enumerate(population)]
 
-        return self.do_roulette(population, length, k, individual_fitness_list)
+        return do_roulette(population, length, k, individual_fitness_list)
 
 
 class EntropicBoltzmannSelection(SelectionMethod):
@@ -151,12 +152,8 @@ class ProbabilisticTournamentSelection(SelectionMethod):
             first_fitness = fitness(first)
             second_fitness = fitness(second)
 
-            if first_fitness > second_fitness:
-                best = first
-                worst = second
-            else:
-                best = second
-                worst = first
+            best = first if first_fitness > second_fitness else second
+            worst = second if first_fitness > second_fitness else first
 
             r = random.uniform(0, 1)
 
