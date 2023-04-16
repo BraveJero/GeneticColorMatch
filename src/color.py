@@ -32,4 +32,4 @@ class Color:
         return f"#{r}{g}{b}"
 
     def distance(self, other: Color) -> float:
-        return sqrt((self._b - other._b) ** 2 + (self._g - other._g) ** 2 + (self._g - other._g) ** 2)
+        return sqrt((self.r - other.r) ** 2 + (self.g - other.g) ** 2 + (self.b - other.b) ** 2)

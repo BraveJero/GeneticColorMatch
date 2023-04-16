@@ -129,10 +129,11 @@ def main():
         individual_factory=ColorProportionIndividualFactory(goal=color_goal, palette=color_palette)
     )
 
+    generations = sim.simulate()
+
     print("Would you like to plot the data? It may take some time. [y/n]")
     try:
         if input() == 'y':
-            generations = sim.simulate()
             generational_data = []
             for (i, generation) in enumerate(generations):
                 generational_data.append([])

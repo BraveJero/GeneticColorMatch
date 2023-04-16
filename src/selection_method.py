@@ -21,7 +21,7 @@ class EliteSelection(SelectionMethod):
         if length == 0:
             return winners
 
-        population.sort(key=lambda ind: ind.fitness())
+        population.sort(key=lambda ind: ind.fitness(), reverse=True)
 
         for i, individual in enumerate(population):
             n = math.ceil((k - i) / length)
@@ -93,7 +93,7 @@ class RankSelection(RouletteWheelSelection):
         if length == 0:
             return []
 
-        population.sort(key=lambda ind: ind.fitness())
+        population.sort(key=lambda ind: ind.fitness(), reverse=True)
         individual_fitness_list = [(length - (idx + 1)) / length for idx, ind in enumerate(population)]
 
         return do_roulette(population, length, k, individual_fitness_list)
