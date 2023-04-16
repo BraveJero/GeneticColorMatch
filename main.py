@@ -41,11 +41,11 @@ def get_selection_method(genetic_settings) -> SelectionMethod:
         case "ranking":
             return RankSelection()
         case "boltzmann":
-            return EntropicBoltzmannSelection(genetic_settings["selection_method"]["parameter"])
+            return EntropicBoltzmannSelection(int(genetic_settings["selection_method"]["parameter"]))
         case "probabilistic_tournament":
             return ProbabilisticTournamentSelection()
         case "deterministic_tournament":
-            return DeterministicTournamentSelection(genetic_settings["selection_method"]["parameter"])
+            return DeterministicTournamentSelection(int(genetic_settings["selection_method"]["parameter"]))
         case _:
             raise ValueError("Unsupported selection method")
 
