@@ -1,24 +1,24 @@
 {
   "stop_condition": {
     "condition": "generation",
-    "parameter": "5"
+    "parameter": "5000"
   },
   "selection_method": {
-    "method": "roulette",
+    "method": "ranking",
     "parameter": "None"
   },
   "crossover_method": "single_point",
   "mutation_method": {
     "method": {
       "name": "gradient",
-      "parameter": "0.6"
+      "parameter": "0.7"
     },
-    "probability": "0.2",
+    "probability": "0.7",
     "mutation": "complete"
   },
   "new_generation_selection": "None",
-  "n": "100",
-  "k": "40",
-  "goal": "100,100,100",
-  "palette": "0,0,0;255,255,255;255,0,0;0,255,0;0,0,255;100,50,20;0,200,12"
+  "n": "50",
+  "k": "10",
+  "goal": "100,200,130",
+  "palette": "0,0,0;255,255,255;255,0,0;0,255,0;0,0,255;100,50,20;0,200,12;240,240,230;0,233,120;123,24,60;240,240,240"
 }
