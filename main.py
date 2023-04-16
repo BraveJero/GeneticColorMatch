@@ -6,6 +6,7 @@ import numpy as np
 from src.color import Color
 from src.color_palette import ColorPalette
 from src.crossover import Crossover, OnePointCrossover, TwoPointCrossover, AnnularCrossover, UniformCrossover
+from src.generation_selection import UseAllGenerationSelection, NewOverActualGenerationSelection
 from src.individual_factory import ColorProportionIndividualFactory
 from src.mutation import Mutation, SingleGeneMutation, LimitedMultigeneMutation, UniformMutation, CompleteMutation
 from src.mutation_method import MutationMethod, ColorProportionRandomMutation, ColorProportionGradientMutation
@@ -90,14 +91,14 @@ def get_mutation(genetic_settings) -> Mutation:
             raise ValueError("Unsupported mutation method")
 
 
-# def get_new_generation_selection(genetic_settings):   TODO
-#     match genetic_settings["new_generation_selection"]:
-#         case "use_all":
-#             return
-#         case "new_over_actual":
-#             return
-#         case _:
-#             raise ValueError("Unsupported generation selection method")
+def get_generation_selection(genetic_settings, selection_method):
+    match genetic_settings["generation_selection"]:
+        case "use_all":
+            return UseAllGenerationSelection(selection_method, int(genetic_settings["n"]))
+        case "new_over_actual":
+            return NewOverActualGenerationSelection(selection_method, int(genetic_settings["n"]))
+        case _:
+            raise ValueError("Unsupported generation selection method")
 
 
 def main():
@@ -119,14 +120,17 @@ def main():
     for color in np.mat(genetic_settings["palette"]).tolist():
         color_palette.add_color(Color(color[0], color[1], color[2]))
 
+    selection_method = get_selection_method(genetic_settings)
+
     sim = Simulation(
         n=int(genetic_settings["n"]),
         k=int(genetic_settings["k"]),
         stop_condition=get_stop_condition(genetic_settings),
-        selection_method=get_selection_method(genetic_settings),
+        selection_method=selection_method,
         crossover_method=get_crossover_method(genetic_settings),
         mutation=get_mutation(genetic_settings),
-        individual_factory=ColorProportionIndividualFactory(goal=color_goal, palette=color_palette)
+        individual_factory=ColorProportionIndividualFactory(goal=color_goal, palette=color_palette),
+        generation_selection=get_generation_selection(genetic_settings, selection_method)
     )
 
     generations = sim.simulate()

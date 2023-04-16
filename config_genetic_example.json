@@ -17,6 +17,7 @@
     "probability": "0.01",
     "mutation": "limited_multi-genome"
   },
+  "generation_selection": "use_all",
   "new_generation_selection": "None",
   "n": "500",
   "k": "100",
