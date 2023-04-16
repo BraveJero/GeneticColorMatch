@@ -38,7 +38,7 @@ class ColorProportionIndividualFactory(IndividualFactory):
             ch.append(ColorProportionGene(0))
         ch[random.randint(0, len(self._palette) - 1)] = ColorProportionGene(1)
         # for _ in range(len(self._palette)):
-        #     ch.append(ColorProportionGene.create_random())
+        #     ch.append(ColorProportionGene.create_random())   ## TODO: Check and report in report
         return self.generate_from_chromosome(Chromosome(ch))
 
     def generate_from_chromosome(self, chromosome: Chromosome) -> ColorIndividual | None:
