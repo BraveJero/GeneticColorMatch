@@ -2,7 +2,7 @@
   "plot": "never_ask",
   "stop_condition": {
     "condition": "generation",
-    "parameter": "100"
+    "parameter": "50"
   },
   "selection_method": {
     "method": "elite",
@@ -12,14 +12,14 @@
   "mutation_method": {
     "method": {
       "name": "random",
-      "parameter": "0.9"
+      "parameter": "0.01"
     },
-    "probability": "0.9",
+    "probability": "0.01",
     "mutation": "limited_multi-genome"
   },
   "new_generation_selection": "None",
   "n": "500",
   "k": "100",
-  "goal": "200,10,10",
+  "goal": "140,140,0",
   "palette": "0,0,0;0,0,255;0,255,0;0,255,255;255,0,0;255,0,255;255,255,0;255,255,255"
 }
