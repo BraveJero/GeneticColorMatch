@@ -39,3 +39,7 @@ class ColorIndividual(Individual):
 
     def __repr__(self):
         return self.__str__()
+
+    @property
+    def color(self):
+        return self._color

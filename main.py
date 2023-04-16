@@ -14,6 +14,7 @@ from src.selection_method import SelectionMethod, ProbabilisticTournamentSelecti
     EntropicBoltzmannSelection
 from src.simulation import Simulation
 from src.stop_condition import GenerationCountStopCondition, StopCondition, GoalIndividualStopCondition
+from utils import plot_data
 
 
 def get_stop_condition(genetic_settings) -> StopCondition:
@@ -128,8 +129,22 @@ def main():
         individual_factory=ColorProportionIndividualFactory(goal=color_goal, palette=color_palette)
     )
 
-    generations = sim.simulate()
-    print(generations)
+    print("Would you like to plot the data? It may take some time. [y/n]")
+    try:
+        if input() == 'y':
+            generations = sim.simulate()
+            generational_data = []
+            for (i, generation) in enumerate(generations):
+                generational_data.append([])
+                for (j, individual) in enumerate(generation):
+                    generational_data[i].append([])
+                    generational_data[i][j].append(individual.color.r / 255)
+                    generational_data[i][j].append(individual.color.g / 255)
+                    generational_data[i][j].append(individual.color.b / 255)
+
+            plot_data(generational_data, color_goal)
+    except:
+        print("bruh.")
 
 
 if __name__ == "__main__":
