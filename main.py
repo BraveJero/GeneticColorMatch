@@ -133,7 +133,7 @@ def main():
 
     print("Would you like to plot the data? It may take some time. [y/n]")
     try:
-        if input() == 'y':
+        if genetic_settings["plot"] == "never_ask" or input() == 'y':
             generational_data = []
             for (i, generation) in enumerate(generations):
                 generational_data.append([])

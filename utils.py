@@ -28,6 +28,7 @@ def plot_data(colors_list, color_goal):
     frames = []
     for i, colors in tqdm(enumerate(colors_list), total=len(colors_list)):
         fig = create_3d_plot(colors, color_goal)
+        plt.title(f"Generation {i}")
         fig.canvas.draw()
         # Get the RGBA array of the figure
         frame = np.array(fig.canvas.renderer.buffer_rgba())
@@ -35,4 +36,5 @@ def plot_data(colors_list, color_goal):
         plt.close(fig)  # Close the figure to prevent it from displaying in the notebook
 
     # Save the frames as a GIF
-    frames[0].save('3d_point_plot.gif', format='GIF', append_images=frames[1:], save_all=True, duration=100, loop=0)
+    frames[0].save('generational_point_plot.gif', format='GIF', append_images=frames[1:], save_all=True, duration=100,
+                   loop=0)
