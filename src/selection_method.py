@@ -74,11 +74,11 @@ class UniversalSelection(SelectionMethod):
 
         r = random.random()
         for i in range(k):
-            ri = (r + i) / k  # TODO: ??
+            ri = (r + i) / k
             accumulated_fitness = 0
             for j in range(length):
                 relative_fitness = fitness_list[j] / fitness_sum
-                if accumulated_fitness < r <= accumulated_fitness + relative_fitness:
+                if accumulated_fitness < ri <= accumulated_fitness + relative_fitness:
                     winners.append(population[j])
                     break
                 accumulated_fitness += relative_fitness
