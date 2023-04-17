@@ -15,15 +15,15 @@ from src.selection_method import SelectionMethod, ProbabilisticTournamentSelecti
     RouletteWheelSelection, UniversalSelection, RankSelection, DeterministicTournamentSelection, \
     EntropicBoltzmannSelection
 from src.simulation import Simulation
-from src.stop_condition import GenerationCountStopCondition, StopCondition, GoalIndividualStopCondition
+from src.stop_condition import GenerationCountStopCondition, StopCondition, GoalIndividualStopCondition, \
+    TimeStopCondition
 from utils import plot_data
 
 
 def get_stop_condition(genetic_settings) -> StopCondition:
     match genetic_settings["stop_condition"]["condition"]:
         case "time":
-            # TODO: genetic_settings["stop_condition"]["parameter"] has the time
-            raise NotImplemented
+            return TimeStopCondition(int(genetic_settings["stop_condition"]["parameter"]))
         case "generation":
             return GenerationCountStopCondition(int(genetic_settings["stop_condition"]["parameter"]))
         case "acceptable_solution":
