@@ -42,7 +42,11 @@ def get_selection_method(genetic_settings) -> SelectionMethod:
         case "ranking":
             return RankSelection()
         case "boltzmann":
-            return EntropicBoltzmannSelection(int(genetic_settings["selection_method"]["parameter"]))
+            parameter = genetic_settings["selection_method"]["parameter"]
+            t0 = float(parameter["initial_temp"])
+            tc = float(parameter["final_temp"])
+            k = float(parameter["k_value"])
+            return EntropicBoltzmannSelection(t0, tc, k)
         case "probabilistic_tournament":
             return ProbabilisticTournamentSelection()
         case "deterministic_tournament":
