@@ -7,6 +7,9 @@ class ColorPalette:
     def __init__(self, palette: List[Color]):
         self._palette = palette
 
+    def add_color(self, color: Color):
+        self._palette.append(color)
+
     def from_proportions(self, proportions: List[float]) -> Color:
         if len(proportions) != len(self._palette):
             raise ValueError("Proportions do not match palette")

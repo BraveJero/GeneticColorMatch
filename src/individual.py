@@ -30,6 +30,16 @@ class ColorIndividual(Individual):
         self._palette = palette
         self._goal = goal
         self._color = palette.from_proportions([g.value for g in self._chromosome.information])
+        self._normalize()
+
+    def _normalize(self):
+        total = 0
+        for gene in self._chromosome.information:
+            total += gene.value
+        if total == 0:
+            return
+        for gene in self._chromosome.information:
+            gene.value = gene.value / total
 
     def fitness(self) -> float:
         return MAX_FITNESS - Color.distance(self._goal, self._color)
@@ -39,3 +49,7 @@ class ColorIndividual(Individual):
 
     def __repr__(self):
         return self.__str__()
+
+    @property
+    def color(self):
+        return self._color

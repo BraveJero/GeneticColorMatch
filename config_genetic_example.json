@@ -1,15 +1,26 @@
 {
+  "plot": "never_ask",
   "stop_condition": {
-    "condition": "",
-    "parameter": ""
+    "condition": "generation",
+    "parameter": "50"
   },
   "selection_method": {
-    "method": "",
-    "parameter": ""
+    "method": "elite",
+    "parameter": "None"
   },
-  "crossover_method": "",
-  "mutation_method": "",
-  "new_generation_selection": "",
-  "n": "",
-  "k": ""
+  "crossover_method": "uniform",
+  "mutation_method": {
+    "method": {
+      "name": "random",
+      "parameter": "0.01"
+    },
+    "probability": "0.01",
+    "mutation": "limited_multi-genome"
+  },
+  "generation_selection": "use_all",
+  "new_generation_selection": "None",
+  "n": "500",
+  "k": "100",
+  "goal": "140,140,0",
+  "palette": "0,0,0;0,0,255;0,255,0;0,255,255;255,0,0;255,0,255;255,255,0;255,255,255"
 }

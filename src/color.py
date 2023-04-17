@@ -26,7 +26,10 @@ class Color:
         return self._b
 
     def __repr__(self):
-        return f"#{hex(self._r).lstrip('0x')}{hex(self._g).lstrip('0x')}{hex(self._b).lstrip('0x')}"
+        r = "00" if self.r == 0 else hex(self.r).lstrip('0x')
+        g = "00" if self.g == 0 else hex(self.g).lstrip('0x')
+        b = "00" if self.b == 0 else hex(self.b).lstrip('0x')
+        return f"#{r}{g}{b}"
 
     def distance(self, other: Color) -> float:
-        return sqrt((self._b - other._b) ** 2 + (self._g - other._g) ** 2 + (self._g - other._g) ** 2)
+        return sqrt((self.r - other.r) ** 2 + (self.g - other.g) ** 2 + (self.b - other.b) ** 2)
