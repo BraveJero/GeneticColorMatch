@@ -7,6 +7,7 @@ from src.color import Color
 from src.color_palette import ColorPalette
 from src.crossover import Crossover, OnePointCrossover, TwoPointCrossover, AnnularCrossover, UniformCrossover
 from src.generation_selection import UseAllGenerationSelection, NewOverActualGenerationSelection
+from src.individual import MAX_FITNESS
 from src.individual_factory import ColorProportionIndividualFactory
 from src.mutation import Mutation, SingleGeneMutation, LimitedMultigeneMutation, UniformMutation, CompleteMutation
 from src.mutation_method import MutationMethod, ColorProportionRandomMutation, ColorProportionGradientMutation
@@ -138,6 +139,17 @@ def main():
     )
 
     generations = sim.simulate()
+
+    best = max(generations[-1], key=lambda ind: ind.fitness())
+
+    print("Best match: ", best)
+    print("Difference: ", "{:.2%}".format((MAX_FITNESS - best.fitness()) / MAX_FITNESS))
+    print("Proportions of each color")
+
+    for idx, color in enumerate(color_palette.get_colors()):
+        print(color, ": ", "{:.2%}".format(best.chromosome.information[idx].value))
+
+    print()
 
     print("Would you like to plot the data? It may take some time. [y/n]")
     try:
