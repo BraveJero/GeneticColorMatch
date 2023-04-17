@@ -43,3 +43,17 @@ class TimeStopCondition(StopCondition):
     def __call__(self, generation_count: int, generation: List[Individual]) -> bool:
         return self._running_time < (time_ms() - self._start)
 
+
+class ContentStopCondition(StopCondition):
+    def __init__(self, delta: float, unchanged_generations: int):
+        self._delta = delta
+        self._unchanged_generations = unchanged_generations
+        self._unchanged = 0
+        self._previous = 0
+
+    def __call__(self, generation_count: int, generation: List[Individual]) -> bool:
+        best = max([ind.fitness() for ind in generation])
+        self._unchanged = self._unchanged + 1 if self._previous - self._delta <= best <= self._previous + self._delta \
+            else 0
+        self._previous = best
+        return self._unchanged > self._unchanged_generations
