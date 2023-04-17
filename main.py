@@ -16,7 +16,7 @@ from src.selection_method import SelectionMethod, ProbabilisticTournamentSelecti
     EntropicBoltzmannSelection
 from src.simulation import Simulation
 from src.stop_condition import GenerationCountStopCondition, StopCondition, GoalIndividualStopCondition, \
-    TimeStopCondition
+    TimeStopCondition, ContentStopCondition
 from utils import plot_data
 
 
@@ -28,6 +28,11 @@ def get_stop_condition(genetic_settings) -> StopCondition:
             return GenerationCountStopCondition(int(genetic_settings["stop_condition"]["parameter"]))
         case "acceptable_solution":
             return GoalIndividualStopCondition(float(genetic_settings["stop_condition"]["parameter"]))
+        case "content":
+            parameter = genetic_settings["stop_condition"]["parameter"]
+            delta = float(parameter["delta"])
+            unchanged_generations = int(parameter["unchanged_generations"])
+            return ContentStopCondition(delta, unchanged_generations)
         case _:
             raise ValueError("Unsupported stop condition")
 
@@ -142,6 +147,7 @@ def main():
 
     best = max(generations[-1], key=lambda ind: ind.fitness())
 
+    print("Amount of generations: ", len(generations))
     print("Best match: ", best)
     print("Difference: ", "{:.2%}".format((MAX_FITNESS - best.fitness()) / MAX_FITNESS))
     print("Proportions of each color")
