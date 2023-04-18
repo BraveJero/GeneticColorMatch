@@ -32,8 +32,8 @@ class Simulation:
 
     def simulate(self) -> List[List[Individual]]:
         gen: List[Individual] = self._if.generate_random_population(self._n)
-        ans = []
-
+        ans = [gen.copy()]
+        
         iteration = 0
         while not self._sc(iteration, gen):
             iteration += 1
@@ -53,6 +53,6 @@ class Simulation:
                 if child2 is not None:
                     children.append(child2)
             gen = self._generation_selection.get_next_generation(gen, children)
-            ans.append(gen)
+            ans.append(gen.copy())
 
         return ans
