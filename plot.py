@@ -3,8 +3,10 @@ from abc import ABC
 from functools import reduce
 from typing import List
 
+import matplotlib.pyplot as plt
 import numpy as np
 
+from src.individual import MAX_FITNESS
 from src.color import Color
 from src.color_palette import ColorPalette
 from src.crossover import OnePointCrossover
@@ -18,7 +20,7 @@ from src.simulation import Simulation
 from src.stop_condition import GenerationCountStopCondition
 
 TEST_COUNT = 10
-GENERATION_COUNT = 100
+GENERATION_COUNT = 5
 PALETTE_SIZE = 8
 GENERATION_SIZE = 10
 CHILDREN_SIZE = 5
@@ -53,6 +55,9 @@ class Plotter(ABC):
         )
 
         generations: List[List[Individual]] = s.simulate()
+        fitnesses = [
+            [individual.fitness() for individual in generation] for generation in generations
+        ]
         bests = list(map(
             lambda g: reduce(
                 (lambda i1, i2: i1 if i1.fitness() >= i2.fitness() else i2),
@@ -60,7 +65,11 @@ class Plotter(ABC):
             ),
             generations
         ))
-        print(list(map(lambda i: i.fitness(), bests)))
+        plt.plot(range(len(bests)), list(map(lambda i: i.fitness(), bests)))
+        print(list(map(lambda i: i.fitness(), bests)), sep="\n")
+        plt.ylim([0, MAX_FITNESS])
+
+        plt.savefig(OUTPUT_DIR + "linegraph.jpg")
 
 
 if __name__ == "__main__":
