@@ -6,6 +6,14 @@ from typing import List
 from src.individual import Individual
 
 
+def temperature(t0: float, tc: float, k: float, t: int) -> float:
+    return tc + (t0 - tc) * math.exp(-k * t)
+
+
+def expected_value(fitness: float, temp: float, avg: float) -> float:
+    return math.exp(fitness / temp) / avg
+
+
 class SelectionMethod(ABC):
     def get_winners(self, population: List[Individual], k: int) \
             -> List[Individual]:
@@ -100,12 +108,23 @@ class RankSelection(RouletteWheelSelection):
 
 
 class EntropicBoltzmannSelection(SelectionMethod):
-    def __init__(self, temperature: int):
-        self._temperature = temperature
+    def __init__(self, t0: float, tc: float, k: float):
+        self._k = k
+        self._t0 = t0
+        self._tc = tc
 
     def get_winners(self, population: List[Individual], k: int) \
             -> List[Individual]:
-        pass
+        length = len(population)
+        if length == 0:
+            return []
+
+        temp = temperature(self._t0, self._tc, self._k, k)
+        pseudo_fitness_list = [math.exp(ind.fitness() / temp) for ind in population]
+        avg_population = sum(pseudo_fitness_list) / len(pseudo_fitness_list)
+        pseudo_fitness_list = [fitness / avg_population for fitness in pseudo_fitness_list]
+
+        return do_roulette(population, length, k, pseudo_fitness_list)
 
 
 class DeterministicTournamentSelection(SelectionMethod):

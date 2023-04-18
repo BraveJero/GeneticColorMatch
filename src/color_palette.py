@@ -7,6 +7,9 @@ class ColorPalette:
     def __init__(self, palette: List[Color]):
         self._palette = palette
 
+    def get_colors(self) -> List[Color]:
+        return self._palette
+
     def add_color(self, color: Color):
         self._palette.append(color)
 

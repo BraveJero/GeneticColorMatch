@@ -7,6 +7,7 @@ from src.color import Color
 from src.color_palette import ColorPalette
 from src.crossover import Crossover, OnePointCrossover, TwoPointCrossover, AnnularCrossover, UniformCrossover
 from src.generation_selection import UseAllGenerationSelection, NewOverActualGenerationSelection
+from src.individual import MAX_FITNESS
 from src.individual_factory import ColorProportionIndividualFactory
 from src.mutation import Mutation, SingleGeneMutation, LimitedMultigeneMutation, UniformMutation, CompleteMutation
 from src.mutation_method import MutationMethod, ColorProportionRandomMutation, ColorProportionGradientMutation
@@ -14,19 +15,24 @@ from src.selection_method import SelectionMethod, ProbabilisticTournamentSelecti
     RouletteWheelSelection, UniversalSelection, RankSelection, DeterministicTournamentSelection, \
     EntropicBoltzmannSelection
 from src.simulation import Simulation
-from src.stop_condition import GenerationCountStopCondition, StopCondition, GoalIndividualStopCondition
+from src.stop_condition import GenerationCountStopCondition, StopCondition, GoalIndividualStopCondition, \
+    TimeStopCondition, ContentStopCondition
 from utils import plot_data
 
 
 def get_stop_condition(genetic_settings) -> StopCondition:
     match genetic_settings["stop_condition"]["condition"]:
         case "time":
-            # TODO: genetic_settings["stop_condition"]["parameter"] has the time
-            raise NotImplemented
+            return TimeStopCondition(int(genetic_settings["stop_condition"]["parameter"]))
         case "generation":
             return GenerationCountStopCondition(int(genetic_settings["stop_condition"]["parameter"]))
         case "acceptable_solution":
             return GoalIndividualStopCondition(float(genetic_settings["stop_condition"]["parameter"]))
+        case "content":
+            parameter = genetic_settings["stop_condition"]["parameter"]
+            delta = float(parameter["delta"])
+            unchanged_generations = int(parameter["unchanged_generations"])
+            return ContentStopCondition(delta, unchanged_generations)
         case _:
             raise ValueError("Unsupported stop condition")
 
@@ -42,7 +48,11 @@ def get_selection_method(genetic_settings) -> SelectionMethod:
         case "ranking":
             return RankSelection()
         case "boltzmann":
-            return EntropicBoltzmannSelection(int(genetic_settings["selection_method"]["parameter"]))
+            parameter = genetic_settings["selection_method"]["parameter"]
+            t0 = float(parameter["initial_temp"])
+            tc = float(parameter["final_temp"])
+            k = float(parameter["k_value"])
+            return EntropicBoltzmannSelection(t0, tc, k)
         case "probabilistic_tournament":
             return ProbabilisticTournamentSelection()
         case "deterministic_tournament":
@@ -134,6 +144,18 @@ def main():
     )
 
     generations = sim.simulate()
+
+    best = max(generations[-1], key=lambda ind: ind.fitness())
+
+    print("Amount of generations: ", len(generations))
+    print("Best match: ", best)
+    print("Difference: ", "{:.2%}".format((MAX_FITNESS - best.fitness()) / MAX_FITNESS))
+    print("Proportions of each color")
+
+    for idx, color in enumerate(color_palette.get_colors()):
+        print(color, ": ", "{:.2%}".format(best.chromosome.information[idx].value))
+
+    print()
 
     print("Would you like to plot the data? It may take some time. [y/n]")
     try:
