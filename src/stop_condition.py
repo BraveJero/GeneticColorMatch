@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import List
 
 import time
+import math
 
 from .individual import Individual, MAX_FITNESS
 
@@ -26,7 +27,7 @@ class GoalIndividualStopCondition(StopCondition):
 
     def __call__(self, generation_count: int, generation: List[Individual]) -> bool:
         for individual in generation:
-            if individual.fitness() - MAX_FITNESS < self.__similitude:
+            if MAX_FITNESS - individual.fitness() < self.__similitude:
                 return True
         return False
 
